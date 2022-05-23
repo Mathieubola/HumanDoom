@@ -1,5 +1,5 @@
 vizdoom
 numpy
 pandas
-pickle
+pickle5
 scikit-learn
