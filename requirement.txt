@@ -1,0 +1,5 @@
+vizdoom
+numpy
+pandas
+pickle
+scikit-learn
