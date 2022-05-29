@@ -8,7 +8,7 @@ game = DoomGame()
 game.load_config("deadly_corridor.cfg")
 game.set_labels_buffer_enabled(True)
 # Enable freelook in game
-#game.add_game_args("+freelook 1")
+# game.add_game_args("+freelook 1")
 game.set_mode(Mode.SPECTATOR)
 
 available_game_var = ["AMMO2", "HEALTH", "ARMOR", "VELOCITY_X", "VELOCITY_Y", "VELOCITY_Z", "KILLCOUNT", "DAMAGE_TAKEN", "ANGLE"]
@@ -23,7 +23,7 @@ col = [
 
 iteration = int(input("Number of iteration : "))
 game.init()
-
+input()
 for iter in range(iteration):
     game.new_episode()
     output = []
