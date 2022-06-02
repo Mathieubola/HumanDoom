@@ -20,23 +20,11 @@ col = [
     "height_2", "width_2", "lx_2", "ly_2", "enemie_present_2",
 ]
 
-models = {
-    # "Ridge": "./models/model_Ridge.pkl",
-    "MLP": "./models/model_MLP.pkl",
-    # "RF": "./models/model_RF.pkl",
-    # "KNR": "./models/model_KNR.pkl",
-}
-
-threshold = {
-    "Ridge": 0.1,
-    "MLP": 0.2,
-    "RF": 0.2,
-    "KNR": 0.1,
-}
+models = {i:f"./models_training_size/model_{i}.pkl" for i in [1, 5, 10, 20, 50, 100]}
 
 for model_name, model_path in models.items():
     print(model_name)
-    # input()
+    input()
     with open(model_path, "rb") as f:
         model = pickle.load(f)
 
@@ -61,7 +49,7 @@ for model_name, model_path in models.items():
             # Keep only useful columns
 
             y = model.predict(df)
-            y = [i > threshold[model_name] for i in y[0]]
+            y = [i > .2 for i in y[0]]
 
             r = game.make_action(y)
             time.sleep(1/60)

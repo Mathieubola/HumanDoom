@@ -23,7 +23,7 @@ col = [
 
 iteration = int(input("Number of iteration : "))
 game.init()
-input()
+
 for iter in range(iteration):
     game.new_episode()
     output = []

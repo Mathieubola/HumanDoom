@@ -8,7 +8,7 @@ game = DoomGame()
 
 game.load_config("deadly_corridor.cfg")
 game.set_labels_buffer_enabled(True)
-game.set_window_visible(True)
+game.set_window_visible(False)
 game.init()
 
 available_game_var = ["AMMO2", "HEALTH", "ARMOR", "VELOCITY_X", "VELOCITY_Y", "VELOCITY_Z", "KILLCOUNT", "DAMAGE_TAKEN", "ANGLE"]
@@ -20,27 +20,19 @@ col = [
     "height_2", "width_2", "lx_2", "ly_2", "enemie_present_2",
 ]
 
-models = {
-    # "Ridge": "./models/model_Ridge.pkl",
-    "MLP": "./models/model_MLP.pkl",
-    # "RF": "./models/model_RF.pkl",
-    # "KNR": "./models/model_KNR.pkl",
-}
-
-threshold = {
-    "Ridge": 0.1,
-    "MLP": 0.2,
-    "RF": 0.2,
-    "KNR": 0.1,
-}
+models = {i: f"models_training_size/model_{i}.pkl" for i in [1,  5, 10, 20, 50, 100]}
 
 for model_name, model_path in models.items():
-    print(model_name)
-    # input()
+    # import model
     with open(model_path, "rb") as f:
         model = pickle.load(f)
 
-    for _ in range(20):
+    th = 0.2
+    live_count = 0
+    kill_count = 0
+    nb_iteration = 50
+
+    for _ in range(nb_iteration):
         game.new_episode()
         while not game.is_episode_finished():
             state = game.get_state()
@@ -61,11 +53,21 @@ for model_name, model_path in models.items():
             # Keep only useful columns
 
             y = model.predict(df)
-            y = [i > threshold[model_name] for i in y[0]]
+            y = [i > th for i in y[0]]
 
             r = game.make_action(y)
-            time.sleep(1/60)
+            # time.sleep(1/60)
 
             r = game.get_last_reward()
+        
+        if not game.is_player_dead() and n < 1000:
+            live_count += 1
+        
+        kill_count += int(vars[6])
+
+    kill_count /= nb_iteration
+    live_count /= nb_iteration   
+
+    print(f"{model_name} - Kill count : {kill_count/6}, Live count : {live_count}")
 
 game.close()
