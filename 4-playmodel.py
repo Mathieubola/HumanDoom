@@ -58,7 +58,6 @@ for model_name, model_path in models.items():
             X = [*vars, *lab1, *lab2]
 
             df = pd.DataFrame(columns=col, data=[X])
-            # Keep only useful columns
 
             y = model.predict(df)
             y = [i > threshold[model_name] for i in y[0]]
